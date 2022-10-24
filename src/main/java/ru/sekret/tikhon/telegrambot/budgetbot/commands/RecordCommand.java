@@ -43,15 +43,16 @@ public class RecordCommand extends AbstractCommand {
 
     }
 
-    //rec:new:<amount>         - инициировать новую запись с данной суммой, дать выбрать категорию
-    //rec:exp                  - установить тип записи на расход, удалить категорию и дать снова выбор
-    //rec:inc                  - установить тип записи на доход,  удалить категорию и дать снова выбор
-    //rec:cat                  - удалить категорию и дать снова выбор
-    //rec:cat:категория 1      - установить эту категорию
-    //rec:date                 - удалить дату и дать снова выбор
-    //rec:date:2022-09-10      - установить эту дату
-    //rec:cancel               - отменить эту запись, удалить ее черновик
-    //rec:approve              - подтвердить и записать эту запись
+    //rec:new:<amount>              - инициировать новую запись с данной суммой, дать выбрать категорию
+    //rec:exp                       - установить тип записи на расход, удалить категорию и дать снова выбор
+    //rec:inc                       - установить тип записи на доход,  удалить категорию и дать снова выбор
+    //rec:cat                       - удалить категорию и дать снова выбор
+    //rec:cat:категория 1           - установить эту категорию
+    //rec:date-del                  - удалить дату и дать снова выбор
+    //rec:date-custom:2022-09-10    - ручной выбор даты
+    //rec:date-set:2022-09-10       - установить эту дату
+    //rec:cancel                    - отменить эту запись, удалить ее черновик
+    //rec:approve                   - подтвердить и записать эту запись
     //<T extends Serializable, Method extends BotApiMethod<T>>
     public static BotApiMethod<? extends Serializable> updateRecord(@NonNull Long chatId, @NonNull Integer messageId, @NonNull String data) {
         try {
@@ -111,6 +112,7 @@ public class RecordCommand extends AbstractCommand {
             // send answer
             //todo choice answer
             if (record.getCategoryId() == null) {
+                // предложить выбрать категорию
                 final Map<Integer, String> categories = Records.getCategories(chatId, record.getType());
                 final String text = categories.isEmpty()
                         ? emptyCategoriesText(record.getType())
@@ -121,6 +123,7 @@ public class RecordCommand extends AbstractCommand {
                 return editMessage(chatId, messageId, text, replyMarkup);
             } else if (record.getDate() == null) {
                 //todo предложить выбрать дату
+
             } else {
                 //todo предложить подтвердить запись
             }
